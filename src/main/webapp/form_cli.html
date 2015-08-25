@@ -9,6 +9,36 @@
 
 <script>
 
+function listar (data){						
+	
+	var linhas = "<table><tr> <th> Nome </th> <th> E-mail </th> </tr>";
+	i=0;
+    $.each(data, function(key, value){
+    	linhas += "<tr><td>"+ value.nome +"</td>"+
+    			       "<td>"+value.email+"</td>"+
+    			       "<td><a href='javascript:excluir("+i+")'>excluir</a></td>"+
+    			       
+    			    "</tr>";
+    			    
+    	i++;
+    });
+    
+    linhas += "</table>";
+    $("#divClientes").html(linhas);
+    
+}
+ 
+ 
+	
+   function excluir (i){
+    	if (window.confirm("Confirma exclusão?")){
+	    	$.getJSON ('cli.do?i='+i,function(data){
+	    		window.alert('Excluido com Sucesso!');
+	    		listar(data);
+	    	});
+    	}
+    }
+
 $(document).ready( function ( ) {
 
 
@@ -25,29 +55,29 @@ $(document).ready( function ( ) {
         }
     });
 
-
-
-	$("#btnSalvar").click(function(){
-		$.post("cli.do",
-				{
-					nome: $("#nome").val(),
-					email: $("#email").val()
-				},
-				function(data, status){
-					alert("Salvo com sucesso! ");
-					$("#divClientes").html(data);
-				});
-	});
-
-
-
-	$("#btnListar").click(function(){
-		$.get("cli.do",
-				function(data, status){
-					$("#divClientes").html(data);
-				});
-	});
-
+        
+       //CLICK NO SALVAR 
+		$("#btnSalvar").click(function(){
+			$.post("cli.do",
+					{
+						nome: $("#nome").val(),
+						email: $("#email").val()
+					},
+					function(data){
+						alert("Salvo com sucesso! ");
+						listar(data);
+					},'json');
+		});
+	 
+	 //CLICK no Lista
+	 $("#btnListar").click(function(){
+    		$.getJSON("cli.do",	function (data){
+    			
+    				listar(data);
+    	            
+    		});
+    		
+    	});
 
 
 });
@@ -68,7 +98,7 @@ $(document).ready( function ( ) {
 
 
 <div id="divClientes">
-
+	
 
 </div>
 

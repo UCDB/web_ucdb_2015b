@@ -20,8 +20,13 @@ public class ClienteController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		String i =  req.getParameter("i");
+		if(i!=null && !i.isEmpty()){
+			lista.remove(Integer.parseInt(i));
+		}
 		
-		resp.getWriter().print( lista.toString()) ;
+		String json = JsonUtil.objetoParaJson(lista);
+		resp.getWriter().print( json) ;
 	}
 	
 	
@@ -35,6 +40,8 @@ public class ClienteController extends HttpServlet {
 		Cliente cliente = new Cliente(nome, email);
 		lista.add(cliente);
 		
-		resp.getWriter().print(lista);
+		String json = JsonUtil.objetoParaJson(lista);
+		resp.getWriter().print( json) ;
+	
 	}
 }
